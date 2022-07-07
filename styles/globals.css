@@ -1,0 +1,120 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  margin: 10px
+}
+
+.header{
+  padding: 10px;
+  background: #314964;
+  color: aliceblue;
+}
+.header h1 {
+  position: relative;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.3em;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-fom {
+  justify-content: center;
+}
+
+.search-input {
+  width: 80%;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.button {
+  height: 40px;
+  width: 100px;
+}
+
+.post-content-wrapper {
+  margin-bottom: 2em;
+  position: relative;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f7f7f7;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.flex {
+  background-color: #f7f7f7;
+  border-radius: 3px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.flex-child {
+  flex: 100%;
+  height: 100px;
+  margin-bottom: 2%;
+  padding-left: 10px;
+}
+
+.child {
+  border-radius: 3px;
+  background-color: #A2CBFA;
+  border: 1px solid #4390E1;
+  box-sizing: border-box;
+  box-shadow: 0 2px 2px rgba(0,90,250,0.05), 0 4px 4px rgba(0,90,250,0.05), 0 8px 8px rgba(0,90,250,0.05), 0 16px 16px rgba(0,90,250,0.05);
+}
+
+.button {
+  color: #fff;
+  border-radius: 3px;
+  background-color: rgba(45, 194, 73, 0.76);
+  border-color: rgba(2, 86, 19, 0.76);
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+.pagination {
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 0 20px 20px;
+  list-style: none;
+  border-radius: .25rem;
+}
+.page-link {
+  position: relative;
+  display: block;
+  padding: .5rem .75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #007bff;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
