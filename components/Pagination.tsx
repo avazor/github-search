@@ -1,19 +1,20 @@
 import React, {FC} from 'react';
 
 export interface IPagination {
-    itemsPerPage: number,
-    totalItems: number,
+    itemsPerPage: number
+    totalItems: number
     currentPage: number
-    paginate: any
+    isLoading: boolean
+    paginate: (pageNum: number, e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 
-const Pagination: FC<IPagination> = ({itemsPerPage, totalItems, currentPage, paginate}) => {
+const Pagination: FC<IPagination> = ({itemsPerPage, totalItems, currentPage, isLoading, paginate}) => {
     const maxPageNumber = Math.ceil(totalItems / itemsPerPage)
     const pageNumbers = [];
-    if (totalItems === 0) {
+    if (totalItems === 0 || isLoading) {
         return (<></>)
     }
-    if(currentPage > 3){
+    if (currentPage > 3) {
         pageNumbers.push(1);
     }
     for (let i = (currentPage - 2); i <= (currentPage + 2); i++) {
@@ -21,7 +22,7 @@ const Pagination: FC<IPagination> = ({itemsPerPage, totalItems, currentPage, pag
             pageNumbers.push(i);
         }
     }
-    if(currentPage < maxPageNumber -2) {
+    if (currentPage < maxPageNumber - 2) {
         pageNumbers.push(maxPageNumber);
     }
 
@@ -30,7 +31,8 @@ const Pagination: FC<IPagination> = ({itemsPerPage, totalItems, currentPage, pag
             <ul className='pagination'>
                 {pageNumbers.map(number => (
                     <li key={number} className='page-item'>
-                        <a onClick={(e) => paginate(number, e)} href='' className='page-link'>
+                        <a onClick={(e) => paginate(number, e)} href=''
+                           className={number === currentPage ? 'current-page' : 'page-link'}>
                             {number}
                         </a>
                     </li>

@@ -1,73 +1,69 @@
-import React, {useState, FC} from 'react';
+import React, {useState, FC, useEffect} from 'react';
 import {Octokit} from "@octokit/rest";
 import ListRepositories from "./ListRepositories";
 import {IRepo} from "../types/types";
-import Pagination from "./Pagination";
+import Search from "./Search";
 
 const Repositories: FC = () => {
     const [repos, setRepos] = useState<IRepo[]>([]);
     const [reposCount, setReposCount] = useState<number>(0);
-    const [searchValue, setSearchValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
     const reposPerPage = 10;
 
-    async function fetchRepos() {
-        setLoading(true);
+    useEffect(() => {
+        fetchRepos(null);
+    }, [currentPage]);
+
+
+    async function fetchRepos(page: number | null) {
+        console.log('request')
+        if (page) {
+            setCurrentPage(page)
+        }
+        if (searchValue === '') {
+            return;
+        }
+        setIsLoading(true);
         try {
+            console.log('request')
             const octokit = new Octokit({
                 auth: process.env.GITHUB_API_KEY
             })
 
-            const responce = await octokit.request(
+            const response = await octokit.request(
                 'GET /search/repositories',
-                {q: searchValue, per_page: reposPerPage, page: currentPage}
+                {q: searchValue, per_page: reposPerPage, page: page ?? currentPage}
             )
-            console.log('rendering page ' + currentPage)
-            const ReposList = responce.data.items.map(item=>{
-                return {id:item.id, name:item.name, url:item.html_url}
+            const ReposList = response.data.items.map(item => {
+                return {id: item.id, name: item.name, url: item.html_url}
             })
             setRepos(ReposList)
-            setReposCount(responce.data.total_count)
-            setLoading(false)
+            // Max 1000 results returns from Github
+            const totalCount = response.data.total_count > 1000 ? 1000 : response.data.total_count
+            setReposCount(totalCount)
+            setIsLoading(false)
         } catch (e) {
             console.log(e)
         }
     }
 
-    const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        fetchRepos()
-    }
-
-    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchValue(e.target?.value)
-    }
-    const paginate = (pageNumber: number, e:React.MouseEvent<HTMLElement>) => {
+    const paginate = (pageNumber: number, e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         setCurrentPage(pageNumber)
-
-        console.log('clicked on page ' + pageNumber)
-        console.log('page to render ' + currentPage)
-        fetchRepos()
     };
 
     return (
         <>
-            <div className='post-content-wrapper container flex'>
-                <input id='searchInput' className='search-input' onChange={changeHandler} type="text"
-                       placeholder=" Type Repo Name"/>
-                <button className='button' onClick={clickHandler}>Search</button>
-            </div>
+            <Search setSearchValue={setSearchValue} doSearch={fetchRepos}/>
             <div className='post-content-wrapper'>
-                <div className='flex'>
-                        <ListRepositories repos={repos} loading={loading}/>
-                </div>
-                <Pagination
-                    itemsPerPage={reposPerPage}
-                    totalItems={reposCount}
-                    currentPage={currentPage}
-                    paginate={paginate}
+                <ListRepositories repos={repos}
+                                  itemsPerPage={reposPerPage}
+                                  totalItems={reposCount}
+                                  currentPage={currentPage}
+                                  isLoading={isLoading}
+                                  paginate={paginate}
                 />
             </div>
         </>
