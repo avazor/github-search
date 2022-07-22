@@ -3,9 +3,10 @@ import {Octokit} from "@octokit/rest";
 import ListRepositories from "./ListRepositories";
 import {IRepo} from "../types/types";
 import Search from "./Search";
+import {useReposContext} from "./Layout";
 
 const Repositories: FC = () => {
-    const [repos, setRepos] = useState<IRepo[]>([]);
+    const [repos, setRepos] = useReposContext();
     const [reposCount, setReposCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +37,7 @@ const Repositories: FC = () => {
                 'GET /search/repositories',
                 {q: searchValue, per_page: reposPerPage, page: page ?? currentPage}
             )
+            console.log(response.data.items)
             const ReposList = response.data.items.map(item => {
                 return {id: item.id, name: item.name, url: item.html_url}
             })
